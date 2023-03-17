@@ -7,8 +7,8 @@
 #define MAX_LENGTH	512
 
 /*
- * accept input from keyboard, 
- * only visible character is permitted
+ *	accept input from keyboard, 
+ *	only visible character is permitted
  */ 
 char* getInput(bool password){
 	int code;
@@ -66,11 +66,11 @@ char* getInput(bool password){
 }
 
 /* 
- * get input string, 
- * with visible input,
- * field information,
- * and limited length between min and max.
- * run looply until the limitation is satisfied.
+ *	get input char array, 
+ *	with visible input,
+ *	field information,
+ *	and limited length between min and max.
+ *	run looply until the limitation is satisfied.
  */
 char* getString(char* field, int min, int max) {
 	char* input;
@@ -91,10 +91,10 @@ char* getString(char* field, int min, int max) {
 }
 
 /*
- * get input string,
- * with invisible input(*),
- * and limited length between min and max.
- * run looply until the limitation is satisfied.
+ *	get string input,
+ *	with invisible input(*),
+ *	and limited length between min and max.
+ *	run looply until the limitation is satisfied.
  */
 char* getPassword(int min, int max) {
 	char* input;
@@ -112,4 +112,59 @@ char* getPassword(int min, int max) {
 		}
 	}
 	return input;
+}
+
+/*
+ *	determine whether the content of char array is a number.
+ */
+bool isNumber(const char* value) {
+	int i = 0;
+	int dot = 0;
+	if (value[0] == '-') {
+		i = 1;
+	}
+	for (; i < strlen(value); i++) {
+		if (!isdigit(value[i])) {
+			if (value[i] == '.') {
+				dot++;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+	if (dot > 1) {
+		return false;
+	}
+	return true;
+}
+
+/*
+ *	get number input,
+ *	with field information,
+ *	and limited value between min and max.
+ */
+double getNumber(char* field, double min, double max) {
+	char* input;
+	double value;
+	while (true) {
+		printf("Please input %s (%f to %f):", field, min, max);
+		input = getInput(false);
+		if (isNumber(input)) {
+			value = atof(input);
+			free(input);
+			if (value < min || value > max) {
+				printf("The %s should be between %f to %f.\n", field, min, max);
+				printf("Your input is %f. Try agian.\n", value);
+			}
+			else {
+				break;
+			}
+		}
+		else {
+			printf("Your input is not a number. Try agian.\n");
+		}
+	}
+	return value;
 }
