@@ -4,25 +4,18 @@
 #include <stdbool.h>
 #include <string.h>
 
-char* input;
+#define MAX_LENGTH	512
 
-// free the memory
-void clear() {
-	free(input);
-}
-
-// accept input with limit length, only visible character is permitted
-void getString(char* term, int length){
-	if (length <= 0) {
-		printf("The length of input must be larger than 0.\n");
-		return;
-	}
+/*
+ * accept input from keyboard, 
+ * only visible character is permitted
+ */ 
+char* getInput(bool password){
 	int code;
 	int position = 0;
 	char key;
-	input = (char*)malloc((length+1) * sizeof(char));
-	memset(input, '\0', (length + 1) * sizeof(char));
-	printf("Please input %s, with max length %d.\n", term, length);
+	char *input = (char*) malloc(MAX_LENGTH * sizeof(char));
+	memset(input, '\0', MAX_LENGTH);
 	while (true) {
 		// get a keyboard input
 		code = _getch(); 
@@ -48,18 +41,75 @@ void getString(char* term, int length){
 		else if (code >= 32 && code <= 126) {
 			key = (char)code;
 			// if the length of the input is less than limit length
-			if (position < length) {
-				printf("%c", key);
+			if (position < MAX_LENGTH) {
+				if (password) {
+					printf("*");
+				}
+				else {
+					printf("%c", key);
+				}
 				input[position] = key;
 				position++;
 			}
 			// if the length of the input equals to limit length
 			else {
-				printf("\b \b%c", key);
+				if (!password) {
+					printf("\b \b%c", key);
+				}
 				position--;
 				input[position] = key;
 				position++;
 			}
 		}
 	}
+	return input;
+}
+
+/* 
+ * get input string, 
+ * with visible input,
+ * field information,
+ * and limited length between min and max.
+ * run looply until the limitation is satisfied.
+ */
+char* getString(char* field, int min, int max) {
+	char* input;
+	while (true) {
+		printf("Please input %s (%d - %d characters):", field, min, max);
+		input = getInput(false);
+		int length = strlen(input);
+		if (length < min || length > max) {
+			printf("The %s should have %d - %d characters.\n", field, min, max);
+			printf("Your input has %d characters. Try agian.\n", length);
+			free(input);
+		}
+		else {
+			break;
+		}
+	}
+	return input;
+}
+
+/*
+ * get input string,
+ * with invisible input(*),
+ * and limited length between min and max.
+ * run looply until the limitation is satisfied.
+ */
+char* getPassword(int min, int max) {
+	char* input;
+	while (true) {
+		printf("Please input password (%d - %d characters):", min, max);
+		input = getInput(true);
+		int length = strlen(input);
+		if (length < min || length > max) {
+			printf("The password should have %d - %d characters.\n", min, max);
+			printf("Your password has %d characters. Try agian.\n", length);
+			free(input);
+		}
+		else {
+			break;
+		}
+	}
+	return input;
 }

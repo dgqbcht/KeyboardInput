@@ -1,18 +1,20 @@
 #include "keyboardinputc.h"
 
 void testGetch();
+void testGetInput();
 void testGetString();
+void testGetPassword();
 
 int main() {
-	//testGetch();
-	testGetString();
-
-	// free the memory
-	clear();
+	//testGetInput();
+	//testGetString();
+	testGetPassword();
 	return EXIT_SUCCESS;
 }
 
-// to find code of a key input
+/*
+ * to find code of a keyboard input
+ */ 
 void testGetch() {
 	printf("Press any key.\n");
 	char key;
@@ -26,10 +28,37 @@ void testGetch() {
 	}
 }
 
-// test function getString
+/*
+ * test function getInput
+ */
+void testGetInput() {
+	char* content = getInput(false);
+	printf("Length of input is: %d\n", strlen(content));	
+	printf("Visible input is: %s\n", content);
+	free(content);
+	content = getInput(true);
+	printf("Length of input is: %d\n", strlen(content));
+	printf("Invisible input is: %s\n", content);
+	free(content);
+}
+
+/*
+ * test function getString
+ */
 void testGetString() {
-	getString("username",0);
-	if (NULL != input) {
-		printf("Your input is: %s", input);
-	}
+	char* content = getString("username", 4, 8);
+	printf("Length of input is: %d\n", strlen(content));
+	printf("Visible input is: %s\n", content);
+	free(content);
+}
+
+/*
+ *test function getPassword
+ */
+void testGetPassword() {
+	char* content = getPassword(4, 8);
+	printf("Length of input is: %d\n", strlen(content));
+	printf("Visible input is: %s\n", content);
+	free(content);
+	
 }
