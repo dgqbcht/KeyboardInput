@@ -1,10 +1,10 @@
 #include "keyboardinputc.h"
 
-void testGetch();
 void testGetInput();
 void testGetString();
 void testGetPassword();
 void testGetNumber();
+void testColor();
 
 int main() {
 	//testGetch();
@@ -12,24 +12,8 @@ int main() {
 	//testGetString();
 	//testGetPassword();
 	//testGetNumber();
-	
+	//testColor();
 	return EXIT_SUCCESS;
-}
-
-/*
- *	to find code of a keyboard input
- */ 
-void testGetch() {
-	printf("Press any key.\n");
-	char key;
-	while (true) {
-		key = _getch();
-		printf("Your input is: %c\n", key);
-		printf("Code is: %d\n", (int)key);
-		if ((int)key == 13) {
-			break;
-		}
-	}
 }
 
 /*
@@ -81,11 +65,23 @@ void testGetPassword() {
  * test function get number 
  */
 void testGetNumber() {
-	int min = -273.15;
-	int max = 300;
+	double min = -273.15;
+	double max = 300;
 	int top = 1;
 	int left = 4;
 	double value = getNumber("temperature", min, max, top, left);
-	printf("The value is: %f\n", value);
+	printf("The value is: %f\n", value);	
 }
 
+/*
+ *	test functoion setOutputColor and resetOutputColor
+ */
+void testColor() {
+	printf("This is a original message.\n");
+	setOutputColor(BG_LIGHTYELLOW, FG_BLUE);
+	printf("This is a message after color changed.\n");
+	setOutputColor(BG_WHITE, FG_BLACK);
+	printf("This is a message after color changed again.\n");
+	resetOutputColor();
+	printf("This is a message after color reset.\n");
+}
