@@ -1,14 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <conio.h>
 #include <stdbool.h>
-#include <string.h>
+#include "common.h"
 
 #define MAX_LENGTH	512
 
 /*
  *	accept input from keyboard, 
- *	only visible character is permitted
+ *	only visible character is permitted.
+ *	enable password mode with argument [true]
  */ 
 char* getInput(bool password){
 	int code;
@@ -20,7 +19,7 @@ char* getInput(bool password){
 		// get a keyboard input
 		code = _getch(); 
 		// deal with function key, such as F1 to F12
-		if (code == 0 || code == -32) {
+		if (code == 0 || code == -32 || code == 224) {
 			code = _getch();
 		}
 		// deal with enter, end loop
@@ -70,17 +69,31 @@ char* getInput(bool password){
  *	with visible input,
  *	field information,
  *	and limited length between min and max.
+ *	Display content start with [top] line below previous line,
+ *	and after [left] blank characters.
  *	run looply until the limitation is satisfied.
  */
-char* getString(char* field, int min, int max) {
+char* getString(char* field, int min, int max, int top, int left) {
 	char* input;
+	output = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleScreenBufferInfo(output, &csbi);
+	csbi.dwCursorPosition.Y = csbi.dwCursorPosition.Y + top;
 	while (true) {
+		csbi.dwCursorPosition.X = left;
+		SetConsoleCursorPosition(output, csbi.dwCursorPosition);
 		printf("Please input %s (%d - %d characters):", field, min, max);
 		input = getInput(false);
 		int length = strlen(input);
 		if (length < min || length > max) {
+			csbi.dwCursorPosition.X = left; 
+			csbi.dwCursorPosition.Y++;
+			SetConsoleCursorPosition(output, csbi.dwCursorPosition);
 			printf("The %s should have %d - %d characters.\n", field, min, max);
+			csbi.dwCursorPosition.X = left;
+			csbi.dwCursorPosition.Y++;
+			SetConsoleCursorPosition(output, csbi.dwCursorPosition);
 			printf("Your input has %d characters. Try agian.\n", length);
+			csbi.dwCursorPosition.Y++;
 			free(input);
 		}
 		else {
@@ -94,17 +107,31 @@ char* getString(char* field, int min, int max) {
  *	get string input,
  *	with invisible input(*),
  *	and limited length between min and max.
+ *	Display content start with [top] line below previous line,
+ *	and after [left] blank characters.
  *	run looply until the limitation is satisfied.
  */
-char* getPassword(int min, int max) {
+char* getPassword(int min, int max, int top, int left) {
 	char* input;
+	output = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleScreenBufferInfo(output, &csbi);
+	csbi.dwCursorPosition.Y = csbi.dwCursorPosition.Y + top;
 	while (true) {
+		csbi.dwCursorPosition.X = left;
+		SetConsoleCursorPosition(output, csbi.dwCursorPosition);
 		printf("Please input password (%d - %d characters):", min, max);
 		input = getInput(true);
 		int length = strlen(input);
 		if (length < min || length > max) {
+			csbi.dwCursorPosition.X = left;
+			csbi.dwCursorPosition.Y++;
+			SetConsoleCursorPosition(output, csbi.dwCursorPosition);
 			printf("The password should have %d - %d characters.\n", min, max);
+			csbi.dwCursorPosition.X = left;
+			csbi.dwCursorPosition.Y++;
+			SetConsoleCursorPosition(output, csbi.dwCursorPosition);
 			printf("Your password has %d characters. Try agian.\n", length);
+			csbi.dwCursorPosition.Y++;
 			free(input);
 		}
 		else {
@@ -144,19 +171,34 @@ bool isNumber(const char* value) {
  *	get number input,
  *	with field information,
  *	and limited value between min and max.
+ *	Display content start with [top] line below previous line,
+ *	and after [left] blank characters.
+ *  run looply until the limitation is satisfied.
  */
-double getNumber(char* field, double min, double max) {
+double getNumber(char* field, double min, double max, int top, int left) {
 	char* input;
 	double value;
+	output = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleScreenBufferInfo(output, &csbi);
+	csbi.dwCursorPosition.Y = csbi.dwCursorPosition.Y + top;
 	while (true) {
+		csbi.dwCursorPosition.X = left;
+		SetConsoleCursorPosition(output, csbi.dwCursorPosition);
 		printf("Please input %s (%f to %f):", field, min, max);
 		input = getInput(false);
+		csbi.dwCursorPosition.X = left;
+		csbi.dwCursorPosition.Y++;
+		SetConsoleCursorPosition(output, csbi.dwCursorPosition);
 		if (isNumber(input)) {
 			value = atof(input);
 			free(input);
 			if (value < min || value > max) {
 				printf("The %s should be between %f to %f.\n", field, min, max);
+				csbi.dwCursorPosition.X = left;
+				csbi.dwCursorPosition.Y++;
+				SetConsoleCursorPosition(output, csbi.dwCursorPosition);
 				printf("Your input is %f. Try agian.\n", value);
+				csbi.dwCursorPosition.Y++;
 			}
 			else {
 				break;
@@ -164,6 +206,7 @@ double getNumber(char* field, double min, double max) {
 		}
 		else {
 			printf("Your input is not a number. Try agian.\n");
+			csbi.dwCursorPosition.Y++;
 		}
 	}
 	return value;

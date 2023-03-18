@@ -7,10 +7,12 @@ void testGetPassword();
 void testGetNumber();
 
 int main() {
+	//testGetch();
 	//testGetInput();
 	//testGetString();
 	//testGetPassword();
-	testGetNumber();
+	//testGetNumber();
+	
 	return EXIT_SUCCESS;
 }
 
@@ -35,9 +37,11 @@ void testGetch() {
  */
 void testGetInput() {
 	char* content = getInput(false);
+	// visible mode
 	printf("Length of input is: %d\n", (int)strlen(content));	
 	printf("Visible input is: %s\n", content);
 	free(content);
+	// invisible mode
 	content = getInput(true);
 	printf("Length of input is: %d\n", (int)strlen(content));
 	printf("Invisible input is: %s\n", content);
@@ -48,9 +52,13 @@ void testGetInput() {
  *	test function getString
  */
 void testGetString() {
-	char* content = getString("username", 4, 8);
-	printf("Length of input is: %d\n", (int)strlen(content));
-	printf("Visible input is: %s\n", content);
+	int min = 4;
+	int max = 8;
+	int top = 1;
+	int left = 4;
+	char* content = getString("username", min, max, top, left);
+	printf("\033[%dCLength of input is: %d\n",left, (int)strlen(content));
+	printf("\033[%dCVisible input is: %s\n",left, content);
 	free(content);
 }
 
@@ -58,9 +66,13 @@ void testGetString() {
  *	test function getPassword
  */
 void testGetPassword() {
-	char* content = getPassword(4, 8);
-	printf("Length of input is: %d\n", (int)strlen(content));
-	printf("Visible input is: %s\n", content);
+	int min = 4;
+	int max = 8;
+	int top = 1;
+	int left = 4;
+	char* content = getPassword(min, max, top, left);
+	printf("\033[%dCLength of input is: %d\n", left, (int)strlen(content));
+	printf("\033[%dCVisible input is: %s\n", left, content);
 	free(content);
 	
 }
@@ -69,6 +81,11 @@ void testGetPassword() {
  * test function get number 
  */
 void testGetNumber() {
-	double value = getNumber("temperature", -273.15, 3000);
+	int min = -273.15;
+	int max = 300;
+	int top = 1;
+	int left = 4;
+	double value = getNumber("temperature", min, max, top, left);
 	printf("The value is: %f\n", value);
 }
+
