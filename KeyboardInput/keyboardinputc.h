@@ -1,12 +1,52 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdbool.h>
-#include "common.h"
+#include <windows.h>
+
+#define MAX_LENGTH	512
+
+#define FG_BLACK		0
+#define FG_BLUE			1
+#define FG_GREEN		2
+#define FG_LAKEBLUE		3
+#define FG_RED			4
+#define FG_PURPLE		5
+#define FG_YELLOW		6
+#define FG_WHITE		7
+#define FG_GRAY			8
+#define FG_LIGHTBLUE	9
+#define FG_LIGHTGREEN	10
+#define FG_CYAN			11
+#define FG_LIGHTRED		12
+#define FG_LAVENDER		13
+#define FG_LIGHTYELLOW	14
+#define FG_BRIGHTWHITE	15
+
+#define BG_BLUE			16
+#define BG_GREEN		32
+#define BG_LAKEBLUE		48
+#define BG_RED			64
+#define BG_PURPLE		80
+#define BG_YELLOW		96
+#define BG_WHITE		112
+#define BG_GRAY			128
+#define BG_LIGHTBLUE	144
+#define BG_LIGHTGREEN	160
+#define BG_CYAN			176
+#define BG_LIGHTRED		192
+#define BG_LAVENDER		208
+#define BG_LIGHTYELLOW	224
+#define BG_BRIGHTWHITE	240
+
+
+HANDLE output;
+CONSOLE_SCREEN_BUFFER_INFO csbi;
+
 
 /*
- *	accept input from keyboard, 
- *	only visible character is permitted.
- *	enable password mode with argument [true]
+ * accept input from keyboard, 
+ * only visible character is permitted.
+ * enable password mode with argument [true]
  */ 
 char* getInput(const bool password){
 	int code;
@@ -65,13 +105,13 @@ char* getInput(const bool password){
 
 
 /* 
- *	get input char array, 
- *	with visible input,
- *	field information,
- *	and limited length between min and max.
- *	Display content start with [top] line below previous line,
- *	and after [left] blank characters.
- *	run looply until the limitation is satisfied.
+ * get input char array, 
+ * with visible input,
+ * field information,
+ * and limited length between min and max.
+ * Display content start with [top] line below previous line,
+ * and after [left] blank characters.
+ * run looply until the limitation is satisfied.
  */
 char* getString(const char* field, const int min, const int max, const int top, const int left) {
 	char* input;
@@ -103,12 +143,12 @@ char* getString(const char* field, const int min, const int max, const int top, 
 
 
 /*
- *	get string input,
- *	with invisible input(*),
- *	and limited length between min and max.
- *	Display content start with [top] line below previous line,
- *	and after [left] blank characters.
- *	run looply until the limitation is satisfied.
+ * get string input,
+ * with invisible input(*),
+ * and limited length between min and max.
+ * display content start with [top] line below previous line,
+ * and after [left] blank characters.
+ * run looply until the limitation is satisfied.
  */
 char* getPassword(const int min, const int max, const int top, const int left) {
 	char* input;
@@ -139,7 +179,7 @@ char* getPassword(const int min, const int max, const int top, const int left) {
 }
 
 /*
- *	determine whether the content of char array is a number.
+ * determine whether the content of char array is a number.
  */
 bool isNumber(const char* value) {
 	int i = 0;
@@ -165,12 +205,12 @@ bool isNumber(const char* value) {
 }
 
 /*
- *	get number input,
- *	with field information,
- *	and limited value between min and max.
- *	Display content start with [top] line below previous line,
- *	and after [left] blank characters.
- *	run looply until the limitation is satisfied.
+ * get number input,
+ * with field information,
+ * and limited value between min and max.
+ * display content start with [top] line below previous line,
+ * and after [left] blank characters.
+ * run looply until the limitation is satisfied.
  */
 double getNumber(const char* field, const double min, const double max, const int top, const int left) {
 	char* input;
@@ -208,9 +248,9 @@ double getNumber(const char* field, const double min, const double max, const in
 }
 
 /*
- *	change output color,
- *  available background color is in common.h, start with BG_
- *	available foreground color is in common.h, start with FG_
+ * change output color,
+ * available background color is in common.h, start with BG_
+ * available foreground color is in common.h, start with FG_
  */
 void setOutputColor(int background, int foreground) {
 	output = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -218,7 +258,7 @@ void setOutputColor(int background, int foreground) {
 }
 
 /*
- *	reset output color to black background and white foreground
+ * reset output color to black background and white foreground
  */
 void resetOutputColor() {
 	output = GetStdHandle(STD_OUTPUT_HANDLE);

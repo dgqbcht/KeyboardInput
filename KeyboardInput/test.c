@@ -7,7 +7,6 @@ void testGetNumber();
 void testColor();
 
 int main() {
-	//testGetch();
 	//testGetInput();
 	//testGetString();
 	//testGetPassword();
@@ -17,7 +16,7 @@ int main() {
 }
 
 /*
- *	test function getInput
+ * test function getInput
  */
 void testGetInput() {
 	char* content = getInput(false);
@@ -33,7 +32,7 @@ void testGetInput() {
 }
 
 /*
- *	test function getString
+ * test function getString
  */
 void testGetString() {
 	int min = 4;
@@ -47,7 +46,7 @@ void testGetString() {
 }
 
 /*
- *	test function getPassword
+ * test function getPassword
  */
 void testGetPassword() {
 	int min = 4;
@@ -57,8 +56,7 @@ void testGetPassword() {
 	char* content = getPassword(min, max, top, left);
 	printf("\033[%dCLength of input is: %d\n", left, (int)strlen(content));
 	printf("\033[%dCVisible input is: %s\n", left, content);
-	free(content);
-	
+	free(content);	
 }
 
 /*
@@ -74,7 +72,7 @@ void testGetNumber() {
 }
 
 /*
- *	test functoion setOutputColor and resetOutputColor
+ * test functoion setOutputColor and resetOutputColor
  */
 void testColor() {
 	printf("This is a original message.\n");
